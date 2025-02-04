@@ -1,0 +1,11 @@
+Possible Errors in TestAutomation.cs
+
+Unresolved LoraxSQS setup -  Some tests use LoraxSQS without fully setting it up. 
+
+Missing mock setup for SendMessages
+
+Expected exception in ConstructorAndCreateTests
+
+Awaiting SendMessage in SendMessageBatchAsyncUnitTest
+
+Unused SendMessage object in SendMessageBatchAsyncUnitTest
