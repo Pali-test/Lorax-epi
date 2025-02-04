@@ -1,0 +1,46 @@
+// Import required modules
+const fs = require('fs'); // File system module to read JSON files
+const _ = require('lodash'); // Lodash for utility functions
+const { expect } = require('chai'); // Chai for assertions in testing
+
+// Define a DataItem class to structure the data
+class DataItem {
+    constructor(id, countryId, year, cost) {
+        this.id = id;           // Unique identifier for the item
+        this.countryId = countryId; // ID representing the country
+        this.year = year;       // Year of the record
+        this.cost = cost;       // Cost value associated with the record
+    }
+}
+
+// Read the JSON file synchronously and parse it into a JavaScript object
+const jsonData = fs.readFileSync('data.json', 'utf8'); // Read file as string
+const dataArray = JSON.parse(jsonData).map(
+    item => new DataItem(item.id, item.countryId, item.year, item.cost) 
+); 
+// Convert each JSON object into an instance of DataItem and store in an array
+
+// Define Mocha test suite
+describe("JSON Data Tests", () => {
+
+    // Test case: Ensure the list contains data
+    it("should have the correct number of items", () => {
+        expect(dataArray).to.be.an('array').that.is.not.empty; // Check if it's a non-empty array
+        console.log("Total number of items:", dataArray.length);
+    });
+
+    // Test case: Find the most expensive item and assert its CountryId
+    it("should get the top item by Cost descending and assert CountryId", () => {
+        const topItem = _.maxBy(dataArray, 'cost'); // Find item with max cost
+        expect(topItem).to.have.property('countryId'); // Ensure CountryId exists
+        console.log("Top Item CountryId:", topItem.countryId);
+    });
+
+    // Test case: Calculate total cost for the year 2016
+    it("should sum Cost for 2016 and assert total", () => {
+        const totalCost2016 = _.sumBy(dataArray.filter(item => item.year === 2016), 'cost'); 
+        // Filter items for 2016 and sum their cost values
+        console.log("Total Cost for 2016:", totalCost2016); // Print result
+        expect(totalCost2016).to.be.a('number'); // Check if it's a valid number
+    });
+});
